@@ -1,0 +1,16 @@
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\constant\Trigger.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\service\TriggerCalculatorImpl.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\interfaces\AgeCalculator.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\RapportApplication.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\interfaces\TriggerCalculator.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\service\AgeCalculatorImpl.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\service\RapportServiceImpl.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\beans\NoteBean.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\controller\RapportController.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\interfaces\RapportService.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\model\Rapport.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\proxies\PatientProxy.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\model\Risk.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\config\SwaggerConfig.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\beans\PatientBean.java
+D:\Openclassrooms\Projet9\Work\Mediscreen\Mediscreen_rapport\src\main\java\fr\mediscreen\rapport\proxies\NoteProxy.java

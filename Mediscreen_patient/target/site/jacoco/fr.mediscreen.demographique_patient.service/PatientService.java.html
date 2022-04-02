@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PatientService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">patient</a> &gt; <a href="index.source.html" class="el_package">fr.mediscreen.demographique_patient.service</a> &gt; <span class="el_source">PatientService.java</span></div><h1>PatientService.java</h1><pre class="source lang-java linenums">package fr.mediscreen.demographique_patient.service;
+
+import fr.mediscreen.demographique_patient.model.Patient;
+import fr.mediscreen.demographique_patient.repository.PatientRepository;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+//@Data
+@Service
+<span class="fc" id="L15">public class PatientService {</span>
+
+    @Autowired
+    PatientRepository patientRepository;
+
+    public List&lt;Patient&gt; findAll() {
+<span class="fc" id="L21">        return (List&lt;Patient&gt;) patientRepository.findAll();</span>
+    }
+
+    public Patient save(Patient patient) {
+<span class="fc" id="L25">        patientRepository.save(patient);</span>
+<span class="fc" id="L26">        return patient;</span>
+    }
+
+    public Optional&lt;Patient&gt; findById(int id) {
+<span class="fc" id="L30">        return patientRepository.findById(id);</span>
+    }
+
+    public void deleteById(int id) {
+<span class="fc" id="L34">        patientRepository.deleteById(id);</span>
+<span class="fc" id="L35">    }</span>
+
+    public void updatePatient(Patient patient) {
+<span class="fc" id="L38">        patientRepository.save(patient);</span>
+<span class="fc" id="L39">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

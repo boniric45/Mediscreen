@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <title>Mediscreen</title>
+    <style>
+
+.content{
+	display: block;
+	margin-top: 25px;
+	margin-left: auto;
+	margin-right: auto;
+    width: 800px;
+  	height: 580px;
+  	border: 3px solid  #ccc;
+  	border-radius: 10px 10px 10px 10px;
+}
+
+.box-form{
+	justify-content: center;
+	margin-left: 50px;
+	margin-top: 10px;
+	padding: 20px;
+	width: 700px;
+	height: 460px;
+	background-color: rgb(245, 245, 245);
+}
+
+.registration{
+	display: flex;
+	justify-content: center;
+	margin-top: 5px;
+    font-family: "Sofia", sans-serif;
+    font-size: 24px;
+    text-shadow: 3px 3px 3px #ababab;
+}
+
+h2{
+ font-family: "Sofia", sans-serif;
+  font-size: 30px;
+  text-shadow: 3px 3px 3px #ababab;
+}
+
+ .col-6 {
+ margin-top:20px;
+ margin-right:20px;
+font-size:18px;
+    }
+
+.form-group{
+display:inline-flex;
+margin-top:27px;
+justify-content:center;
+width:240px;
+}
+
+.matricule{
+margin-top:7px;
+margin-right:10px;
+font-size:16px;
+}
+
+.btn-submit{
+display: inline-flex;
+padding-left:280px;
+padding-right: 10px;}
+
+.input-group{
+    font-family: "Sofia", sans-serif;
+    font-size: 15px;
+    font-weight:bold;
+}
+
+.btnsave{
+margin-left:260px;
+margin-top:10px ;
+}
+
+.btn{
+	margin-left: 15px;
+}
+
+    </style>
+
+</head>
+
+<body>
+<div class="row">
+    <div class="col-6" align="right">
+        <a href="/patients">Patients</a>&nbsp;|&nbsp;
+        <a href="/notes">Notes</a>&nbsp;|&nbsp;
+    </div>
+<div class="content">
+
+    <div class="registration">Rapport risque de diabète</div>
+
+    <div class="box-form">
+
+        <form action="#"  th:action="@{/assess}" th:object="${rapport}" method="post">
+
+            <div class="form-group">
+                <label for="id" class="matricule">Matricule</label>
+                <input
+                        type="number" th:field="*{patId}" class="form-control" id="id"
+                        aria-describedby="patIdHelp" placeholder="Saisir le matricule" >
+                </div>
+
+            <div class="input-group">
+                <textarea class="form-control" th:field="*{assess}" cols="90" rows=12 aria-label="" disabled></textarea>
+            </div>
+            <br>
+
+            <div class="btnsave">
+                <a class="btn btn-danger" href="/patients" role="button">Annuler</a>
+                <button type="submit" class="btn btn-success">Valider</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

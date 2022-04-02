@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Patient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">patient</a> &gt; <a href="index.source.html" class="el_package">fr.mediscreen.demographique_patient.model</a> &gt; <span class="el_source">Patient.java</span></div><h1>Patient.java</h1><pre class="source lang-java linenums">package fr.mediscreen.demographique_patient.model;
+
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import javax.persistence.*;
+
+@Getter
+<span class="pc" id="L10">@Setter</span>
+<span class="fc" id="L11">@AllArgsConstructor</span>
+<span class="fc" id="L12">@NoArgsConstructor</span>
+@Entity
+public class Patient {
+
+    @Id
+    @Column(name = &quot;id&quot;, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L19">    private Integer id;</span>
+
+    @Column(name = &quot;family&quot;)
+<span class="fc" id="L22">    private String family;</span>
+
+    @Column(name = &quot;given&quot;)
+<span class="fc" id="L25">    private String given;</span>
+
+    @DateTimeFormat(pattern = &quot;yyyy-MM-dd&quot;)
+    @Column(name = &quot;dob&quot;)
+<span class="fc" id="L29">    private LocalDate dob;</span>
+
+    @Column(name = &quot;sex&quot;)
+<span class="fc" id="L32">    private String sex;</span>
+
+    @Column(name = &quot;address&quot;)
+<span class="fc" id="L35">    private String address;</span>
+
+    @Column(name = &quot;phone&quot;)
+<span class="fc" id="L38">    private String phone;</span>
+
+<span class="fc" id="L40">    public Patient(String family, String given, LocalDate dob, String sex, String address, String phone) {</span>
+<span class="fc" id="L41">        this.family = family;</span>
+<span class="fc" id="L42">        this.given = given;</span>
+<span class="fc" id="L43">        this.dob = dob;</span>
+<span class="fc" id="L44">        this.sex = sex;</span>
+<span class="fc" id="L45">        this.address = address;</span>
+<span class="fc" id="L46">        this.phone = phone;</span>
+<span class="fc" id="L47">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

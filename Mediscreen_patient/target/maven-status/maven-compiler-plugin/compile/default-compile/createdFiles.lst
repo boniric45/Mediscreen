@@ -1,0 +1,7 @@
+fr\mediscreen\demographique_patient\service\PatientService.class
+fr\mediscreen\demographique_patient\config\SwaggerConfig$1.class
+fr\mediscreen\demographique_patient\config\SwaggerConfig.class
+fr\mediscreen\demographique_patient\repository\PatientRepository.class
+fr\mediscreen\demographique_patient\model\Patient.class
+fr\mediscreen\demographique_patient\DemographiquePatientApplication.class
+fr\mediscreen\demographique_patient\controller\PatientController.class

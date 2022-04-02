@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotesController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">notes</a> &gt; <a href="index.source.html" class="el_package">fr.mediscreen.notes.controller</a> &gt; <span class="el_source">NotesController.java</span></div><h1>NotesController.java</h1><pre class="source lang-java linenums">package fr.mediscreen.notes.controller;
+
+import fr.mediscreen.notes.beans.PatientBean;
+import fr.mediscreen.notes.model.NotesModel;
+import fr.mediscreen.notes.service.NotesServices;
+import fr.mediscreen.notes.service.PatientService;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@Validated
+<span class="fc" id="L25">public class NotesController {</span>
+<span class="fc" id="L26">    Logger logger = LoggerFactory.getLogger(NotesController.class); // Logger</span>
+
+    @Autowired
+    NotesServices notesServices;
+
+    @Autowired
+    PatientService patientService;
+
+    /**
+     * Create note
+     *
+     * @return String
+     */
+    @ApiOperation(value = &quot;Add a new note&quot;)
+    @PostMapping(value = &quot;/patHistory/add&quot;)
+    public @ResponseBody
+    @Valid ResponseEntity&lt;String&gt; addNewNote(@RequestParam(defaultValue = &quot;Id patient&quot;, required = true) @NotEmpty int patId, @RequestParam(defaultValue = &quot;Note&quot;, required = true) @NotEmpty String note) {
+        try {
+<span class="fc" id="L44">            PatientBean patientBean = patientService.findPatientById(patId);</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            if (patientBean != null) {</span>
+<span class="fc" id="L46">                LocalDate date = LocalDate.now();</span>
+<span class="fc" id="L47">                NotesModel notesModel = new NotesModel(patId, date, note);</span>
+<span class="fc" id="L48">                NotesModel _notesModel = notesServices.save(notesModel);</span>
+<span class="fc" id="L49">                logger.info(&quot;Notes Inserted : &quot; + _notesModel);</span>
+<span class="fc" id="L50">                return new ResponseEntity&lt;&gt;(&quot;Notes Inserted &quot;, HttpStatus.CREATED);</span>
+            }
+<span class="nc" id="L52">            return new ResponseEntity&lt;&gt;(null, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L53">        } catch (Exception e) {</span>
+<span class="fc" id="L54">            logger.error(&quot;Error Inserted Notes: &quot; + e);</span>
+<span class="fc" id="L55">            return new ResponseEntity&lt;&gt;(null, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Read All Notes
+     *
+     * @return List&lt;Notes&gt;
+     */
+    @ApiOperation(value = &quot;Get all notes&quot;)
+    @GetMapping(&quot;/patHistory/all&quot;)
+    public ResponseEntity&lt;List&lt;NotesModel&gt;&gt; getAllNotes() {
+        try {
+<span class="fc" id="L68">            List&lt;NotesModel&gt; notesModelList = new ArrayList&lt;&gt;(notesServices.findAll());</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            if (notesModelList.isEmpty()) {</span>
+<span class="nc" id="L70">                logger.info(&quot;/note/all : &quot; + HttpStatus.NO_CONTENT);</span>
+<span class="nc" id="L71">                return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</span>
+            } else {
+<span class="fc" id="L73">                logger.info(&quot;/note/all : &quot; + notesModelList);</span>
+<span class="fc" id="L74">                return new ResponseEntity&lt;&gt;(notesModelList, HttpStatus.OK);</span>
+            }
+<span class="nc" id="L76">        } catch (Exception e) {</span>
+<span class="nc" id="L77">            logger.error(&quot;/note/all : Error &quot; + e);</span>
+<span class="nc" id="L78">            return new ResponseEntity&lt;&gt;(null, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Read notes by id patient
+     *
+     * @param idPatient
+     * @return
+     */
+    @ApiOperation(value = &quot;Read note by id patient&quot;)
+    @GetMapping(&quot;/patHistory/patient/{id}&quot;)
+    public ResponseEntity&lt;List&lt;NotesModel&gt;&gt; getNotesByPatientId(@PathVariable(&quot;id&quot;) int idPatient) {
+        try {
+<span class="fc" id="L92">            List&lt;NotesModel&gt; notesModelList = notesServices.findNotesByIdPatient(idPatient);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (!notesModelList.isEmpty()) {</span>
+<span class="fc" id="L94">                logger.info(&quot;/patHistory : Patient &quot; + idPatient + &quot;  &gt; &quot; + notesModelList);</span>
+<span class="fc" id="L95">                return new ResponseEntity&lt;&gt;(notesModelList, HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L97">                logger.info(&quot;/note/all : &quot; + HttpStatus.NO_CONTENT);</span>
+<span class="fc" id="L98">                return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</span>
+            }
+<span class="nc" id="L100">        } catch (Exception e) {</span>
+<span class="nc" id="L101">            logger.error(&quot;/note/all : Error &quot; + e);</span>
+<span class="nc" id="L102">            return new ResponseEntity&lt;&gt;(null, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Read note with id note
+     *
+     * @return String
+     */
+    @ApiOperation(value = &quot;Read note by id note&quot;)
+    @GetMapping(&quot;/patHistory/note/{id}&quot;)
+    public ResponseEntity&lt;NotesModel&gt; getNoteById(@PathVariable(&quot;id&quot;) String noteId) {
+        try {
+<span class="fc" id="L115">            Optional&lt;NotesModel&gt; notes = notesServices.findByIdNote(noteId);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            if (notes.isPresent()) {</span>
+<span class="fc" id="L117">                logger.info(&quot;Notes : &quot; + notes.get());</span>
+<span class="fc" id="L118">                return new ResponseEntity&lt;&gt;(notes.get(), HttpStatus.OK);</span>
+            }
+<span class="fc" id="L120">            return new ResponseEntity&lt;&gt;(null, HttpStatus.NO_CONTENT);</span>
+<span class="nc" id="L121">        } catch (Exception e) {</span>
+<span class="nc" id="L122">            logger.error(&quot;Error : &quot; + e);</span>
+<span class="nc" id="L123">            return new ResponseEntity&lt;&gt;(null, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Update note with id note
+     *
+     * @return String
+     */
+    @ApiOperation(value = &quot;Update note by id&quot;)
+    @PutMapping(&quot;/patHistory/update&quot;)
+    public @ResponseBody
+    @Valid ResponseEntity&lt;NotesModel&gt; updateNote(@RequestParam(defaultValue = &quot;Id Note&quot;, required = true) @NotEmpty String id, @RequestParam(defaultValue = &quot;Note&quot;, required = true) @NotEmpty String note) {
+
+<span class="fc" id="L137">        Optional&lt;NotesModel&gt; optionalNotes = notesServices.findByIdNote(id);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (optionalNotes.isPresent()) {</span>
+<span class="fc" id="L139">            LocalDate date = LocalDate.now();</span>
+<span class="fc" id="L140">            NotesModel updateNote = optionalNotes.get();</span>
+<span class="fc" id="L141">            updateNote.setDateNote(date);</span>
+<span class="fc" id="L142">            updateNote.setNote(note);</span>
+<span class="fc" id="L143">            notesServices.save(updateNote);</span>
+<span class="fc" id="L144">            logger.info(&quot;Notes Updated : &quot; + updateNote);</span>
+<span class="fc" id="L145">            return new ResponseEntity&lt;&gt;(updateNote, HttpStatus.OK);</span>
+        } else {
+<span class="fc" id="L147">            return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</span>
+        }
+    }
+
+    /**
+     * Delete Note by Id
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = &quot;Delete note by id note&quot;)
+    @RequestMapping(value = &quot;/patHistory/delete/{id}&quot;, method = RequestMethod.DELETE)
+    public ResponseEntity&lt;HttpStatus&gt; deletePatientById(@PathVariable(&quot;id&quot;) String id) {
+
+        try {
+<span class="fc" id="L162">            Optional&lt;NotesModel&gt; optionalNotes = notesServices.findByIdNote(id);</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            if (optionalNotes.isPresent()) {</span>
+<span class="fc" id="L164">                notesServices.deleteById(id);</span>
+<span class="fc" id="L165">                logger.info(&quot;/patHistory/delete ID: &quot; + id);</span>
+<span class="fc" id="L166">                return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L168">                logger.info(&quot;/patHistory/delete ID: &quot; + HttpStatus.NOT_FOUND);</span>
+<span class="fc" id="L169">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="nc" id="L171">        } catch (Exception e) {</span>
+<span class="nc" id="L172">            logger.error(&quot;/patHistroy/delete Error : &quot; + HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L173">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: fr.mediscreen.rapport.NoteTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.358 s - in fr.mediscreen.rapport.NoteTest

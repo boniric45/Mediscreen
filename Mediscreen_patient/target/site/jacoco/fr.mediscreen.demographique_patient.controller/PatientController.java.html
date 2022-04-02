@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PatientController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">patient</a> &gt; <a href="index.source.html" class="el_package">fr.mediscreen.demographique_patient.controller</a> &gt; <span class="el_source">PatientController.java</span></div><h1>PatientController.java</h1><pre class="source lang-java linenums">package fr.mediscreen.demographique_patient.controller;
+
+import fr.mediscreen.demographique_patient.model.Patient;
+import fr.mediscreen.demographique_patient.service.PatientService;
+import io.swagger.annotations.ApiOperation;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@Validated
+<span class="fc" id="L28">public class PatientController {</span>
+
+<span class="fc" id="L30">    Logger logger = LoggerFactory.getLogger(PatientController.class); // Logger</span>
+
+    @Autowired
+    PatientService patientService;
+
+    /**
+     * Add Patient
+     *
+     * @param family
+     * @param given
+     * @param dob
+     * @param sex
+     * @param address
+     * @param phone
+     * @param response
+     */
+    @ApiOperation(value = &quot;Add Patient&quot;)
+    @PostMapping(&quot;patient/add&quot;)
+    public void addPatient(@RequestParam @Size(min = 2, max = 60, message = &quot;family must be &quot; +
+            &quot;between {min} and {max} characters long&quot;) String family,
+                           @RequestParam @Valid @Size(min = 2, max = 60,
+                                   message = &quot;given must be between {min} and {max} characters &quot; +
+                                           &quot;long&quot;) String given,
+                           @RequestParam @NotNull @DateTimeFormat(pattern = &quot;yyyy-MM-dd&quot;) LocalDate dob,
+                           @RequestParam String sex,
+                           @RequestParam(defaultValue = &quot;not specified&quot;, required = false) @Size(min = 2, max =
+                                   100,
+                                   message = &quot;address must be &quot; +
+                                           &quot;between&quot; +
+                                           &quot; {min} and {max} characters long&quot;) String address,
+                           @RequestParam(defaultValue = &quot;not specified&quot;, required = false) @Size(min = 2, max =
+                                   20,
+                                   message = &quot;phone must be between &quot; +
+                                           &quot;{min} and {max} characters long&quot;) String phone,
+                           HttpServletResponse response) {
+<span class="fc" id="L65">        logger.info(&quot;Enter addPatient in patient microservice&quot;);</span>
+<span class="fc" id="L66">        Patient patient = new Patient(family, given, dob, sex, address, phone);</span>
+<span class="fc" id="L67">        patientService.save(patient);</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Read Patient by id
+     *
+     * @return
+     */
+    @ApiOperation(value = &quot;Get Patient By Id&quot;)
+    @GetMapping(&quot;/patient/{id}&quot;)
+    public @ResponseBody
+    ResponseEntity&lt;Patient&gt; getPatientById(@PathVariable(&quot;id&quot;) int id) {
+
+<span class="fc" id="L80">        Optional&lt;Patient&gt; patientOptional = patientService.findById(id);</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (patientOptional.isPresent()) {</span>
+<span class="fc" id="L82">            Patient patient = patientOptional.get();</span>
+<span class="fc" id="L83">            logger.info(&quot;/patient/&quot; + id);</span>
+<span class="fc" id="L84">            return new ResponseEntity&lt;&gt;(patient, HttpStatus.OK);</span>
+        } else {
+<span class="fc" id="L86">            logger.info(&quot;/patient/&quot; + id + &quot; &quot; + HttpStatus.NOT_FOUND);</span>
+<span class="fc" id="L87">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+    }
+
+    /**
+     * Read All Patient
+     *
+     * @return List of Patient
+     */
+    @ApiOperation(value = &quot;Get All Patients&quot;)
+    @GetMapping(&quot;/patient/all&quot;)
+    public ResponseEntity&lt;List&lt;Patient&gt;&gt; getAllPatient() {
+        try {
+<span class="fc" id="L100">            List&lt;Patient&gt; patientList = new ArrayList&lt;&gt;(patientService.findAll());</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if (patientList.isEmpty()) {</span>
+<span class="fc" id="L102">                logger.info(&quot;/patient/all : &quot; + HttpStatus.NO_CONTENT);</span>
+<span class="fc" id="L103">                return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</span>
+            } else {
+<span class="fc" id="L105">                logger.info(&quot;/patient/all : &quot; + patientList);</span>
+<span class="fc" id="L106">                return new ResponseEntity&lt;&gt;(patientList, HttpStatus.OK);</span>
+            }
+<span class="nc" id="L108">        } catch (Exception e) {</span>
+<span class="nc" id="L109">            logger.error(&quot;/patient/all : Error &quot; + e);</span>
+<span class="nc" id="L110">            return new ResponseEntity&lt;&gt;(null, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Update Patient
+     *
+     * @param family
+     * @param given
+     * @param dob
+     * @param sex
+     * @param address
+     * @param phone
+     * @return Patient
+     */
+    @ApiOperation(value = &quot;Update Patient by Id&quot;)
+    @PutMapping(&quot;/patient/update/{id}&quot;)
+    public @ResponseBody
+    @Valid ResponseEntity&lt;Patient&gt; updatePatient(@PathVariable(&quot;id&quot;) int id, @RequestParam(defaultValue = &quot;family must be between min 2 and max 60 characters long&quot;, required = true)
+    @Size(min = 2, max = 60, message = &quot;family must be between {min} and {max} characters long&quot;) @NotEmpty String family, @RequestParam(defaultValue = &quot;given must be between min 2 and max 60 characters long&quot;, required = true)
+                                                 @Size(min = 2, max = 60, message = &quot;given must be between {min} and {max} characters long&quot;) @NotEmpty String given, @RequestParam(defaultValue = &quot;Pattern dob : yyyy-MM-dd&quot;, required = true) @NotNull @DateTimeFormat(pattern = &quot;yyyy-MM-dd&quot;) LocalDate dob, @RequestParam(defaultValue = &quot; sex must be 1 character long&quot;) @Size(min = 1, max = 1, message = &quot;gender must be &quot; +
+            &quot;between {min} and {max} characters long&quot;) @NotEmpty String sex, @RequestParam(defaultValue = &quot; address must be between min 2 and max 100 characters long&quot;, required = false)
+                                                 @Size(min = 2, max = 100, message = &quot;address must be between {min} and {max} characters long&quot;) String address, @RequestParam(defaultValue = &quot; phone must be between min 2 and max 20 characters long&quot;, required = false)
+                                                 @Size(min = 2, max = 20, message = &quot;phone must be between {min} and {max} characters long&quot;) String phone) {
+<span class="fc" id="L134">        Patient patient = new Patient(family, given, dob, sex, address, phone);</span>
+<span class="fc" id="L135">        Patient patientSearch = patientService.findById(id)</span>
+<span class="pc" id="L136">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Patient is not found :: &quot; + id));</span>
+<span class="fc" id="L137">        patientSearch.setFamily(patient.getFamily());</span>
+<span class="fc" id="L138">        patientSearch.setGiven(patient.getGiven());</span>
+<span class="fc" id="L139">        patientSearch.setDob(patient.getDob());</span>
+<span class="fc" id="L140">        patientSearch.setSex(patient.getSex());</span>
+<span class="fc" id="L141">        patientSearch.setAddress(patient.getAddress());</span>
+<span class="fc" id="L142">        patientSearch.setPhone(patient.getPhone());</span>
+<span class="fc" id="L143">        patientService.updatePatient(patientSearch);</span>
+<span class="fc" id="L144">        logger.info(&quot;/patient/update : &quot; + patient.getId() + &quot; is updated&quot;);</span>
+<span class="fc" id="L145">        return new ResponseEntity&lt;&gt;(patientSearch, HttpStatus.OK);</span>
+    }
+
+
+    /**
+     * Delete Patient by Id
+     *
+     * @param id
+     * @return Response HttpStatus
+     */
+    @ApiOperation(value = &quot;Delete Patient by Id&quot;)
+    @RequestMapping(value = &quot;/patient/{id}&quot;, method = RequestMethod.DELETE)
+    public ResponseEntity&lt;HttpStatus&gt; deletePatientById(@PathVariable(&quot;id&quot;) int id) {
+        try {
+<span class="fc" id="L159">            patientService.deleteById(id);</span>
+<span class="fc" id="L160">            logger.info(&quot;/patient/delete ID: &quot; + id);</span>
+<span class="fc" id="L161">            return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</span>
+<span class="fc" id="L162">        } catch (Exception e) {</span>
+<span class="fc" id="L163">            logger.error(&quot;/patient/delete Error : &quot; + HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L164">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <title>Mediscreen - Update Patient</title>
+    <style>
+
+.content{
+	display: block;
+	margin-top: 25px;
+	margin-left: auto;
+	margin-right: auto;
+    width: 800px;
+  	height: 500px;
+  	border: 3px solid  #ccc;
+  	border-radius: 10px 10px 10px 10px;
+}
+
+.form-control{
+margin-bottom:10px;
+}
+
+.box-form{
+	justify-content: center;
+	margin-left: 50px;
+	margin-top: 10px;
+	padding: 20px;
+	width: 700px;
+	height: 350px;
+	background-color: rgb(245, 245, 245);
+}
+
+.registration{
+	display: flex;
+	justify-content: center;
+	margin-top: 15px;
+    font-family: "Sofia", sans-serif;
+    font-size: 24px;
+    text-shadow: 3px 3px 3px #ababab;
+	font-weight: 600;
+}
+
+
+.dateOfBirth{
+margin-left:5px;
+display:inline-flex;
+width:130px;
+}
+
+.labeldateOfBirth{
+display:inline-flex;
+margin-left:15px;
+width:100px;
+}
+
+.labelSex{
+display:inline-flex;
+margin-left:15px;
+width:100px;
+}
+
+.sex{
+display:inline-flex;
+margin-left:5px;
+width:100px;
+}
+
+.btn-submit{
+display: inline-flex;
+padding-left:280px;
+padding-right: 10px;
+
+}
+
+.btnsave{
+margin-left:260px;
+margin-top:10px ;
+}
+.btn{
+margin-top: 80px;
+	margin-left: 15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="content">
+
+    <div class="registration">Modifier un patient</div>
+
+    <div class="box-form">
+
+        <form action="#"  th:action="@{/updatePatient/validate/{id}(id=${patient.id})}"  th:object="${patient}" method="post">
+            <div class="form-group">
+                <label for="family" class="col-sm-2 control-label">Nom</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{family}" id="family" placeholder="Modifier le nom" class="form-control" required>
+                    <p class="text-danger" th:if="${#fields.hasErrors('family')}" th:errors="*{family}"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="given" class="col-sm-2 control-label">Prénom</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{given}" id="given" placeholder="Modifier le prénom" class="form-control" required>
+                    <p class="text-danger" th:if="${#fields.hasErrors('given')}" th:errors="*{given}"></p>
+                </div>
+            </div>
+
+            <div class="form-group-dateOfBirth">
+                <label for="naissance" class="labeldateOfBirth">Date de naissance</label>
+                <div class="dateOfBirth">
+                    <input type="text" th:field="*{dob}" id="naissance" placeholder="(AAAA-MM-JJ)" class="form-control" required>
+                    <p class="text-danger" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></p>
+                </div>
+            </div>
+
+            <div class="form-group-sex">
+                <label for="sex" class="labelSex">Genre</label>
+                <div class="sex">
+                    <input type="text" th:field="*{sex}" id="sex" placeholder="( M ou F )" class="form-control" maxlength="1" required>
+                    <p class="text-danger" th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address" class="col-sm-2 control-label">Adresse</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{address}" id="address" placeholder="Modifier l'adresse" class="form-control" required>
+                    <p class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
+                </div>
+            </div>
+
+            <div class="form-group-phone">
+                <label for="phone" class="col-sm-2 control-label">Téléphone</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{phone}" id="phone" placeholder="Modifier le téléphone" class="form-control" required>
+                    <p class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+                </div>
+            </div>
+
+            <div class="btnsave">
+                <a class="btn btn-danger" href="/patients" role="button">Annuler</a>
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+fr\mediscreen\notes\model\NotesModel.class
+fr\mediscreen\notes\config\SwaggerConfig.class
+fr\mediscreen\notes\controller\NotesController.class
+fr\mediscreen\notes\repository\NotesRepository.class
+fr\mediscreen\notes\service\NotesServices.class
+fr\mediscreen\notes\service\PatientService.class
+fr\mediscreen\notes\NotesApplication.class
+fr\mediscreen\notes\config\SwaggerConfig$1.class
+fr\mediscreen\notes\proxies\PatientProxy.class
+fr\mediscreen\notes\beans\PatientBean.class

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RapportServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">rapport</a> &gt; <a href="index.source.html" class="el_package">fr.mediscreen.rapport.service</a> &gt; <span class="el_source">RapportServiceImpl.java</span></div><h1>RapportServiceImpl.java</h1><pre class="source lang-java linenums">package fr.mediscreen.rapport.service;
+
+import fr.mediscreen.rapport.beans.PatientBean;
+import fr.mediscreen.rapport.interfaces.AgeCalculator;
+import fr.mediscreen.rapport.interfaces.RapportService;
+import fr.mediscreen.rapport.interfaces.TriggerCalculator;
+import fr.mediscreen.rapport.model.Risk;
+import fr.mediscreen.rapport.proxies.NoteProxy;
+import fr.mediscreen.rapport.proxies.PatientProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+<span class="fc" id="L18">public class RapportServiceImpl implements RapportService {</span>
+
+<span class="fc" id="L20">    private static final Logger logger = LoggerFactory.getLogger(RapportServiceImpl.class);</span>
+
+    @Autowired
+    private PatientProxy patientProxy;
+
+    @Autowired
+    private NoteProxy noteProxy;
+
+    @Autowired
+    private AgeCalculator ageCalculator;
+
+    @Autowired
+    private TriggerCalculator triggerCalculator;
+
+    @Override
+    public Risk getDiabeteLevelRisk(int id) {
+
+<span class="fc" id="L37">        logger.info(&quot;Get diabetes level risk&quot;);</span>
+<span class="fc" id="L38">        PatientBean patient = patientProxy.getPatientById(id);</span>
+<span class="fc" id="L39">        int countTriggerInNote = triggerCalculator.calculateTriggerInNotes(id);</span>
+<span class="fc" id="L40">        int age = ageCalculator.ageCalculate(patient.getDob());</span>
+<span class="fc" id="L41">        String sex = patient.getSex();</span>
+<span class="fc" id="L42">        Risk resultRisk = null;</span>
+
+        // The diabete risk is: None
+<span class="pc bpc" id="L45" title="1 of 8 branches missed.">        if ((sex.equals(&quot;M&quot;) || sex.equals(&quot;F&quot;)) &amp;&amp; age &gt; 30 &amp;&amp; countTriggerInNote &lt;= 1) {</span>
+<span class="fc" id="L46">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L47">            logger.info(&quot;The diabete risk is: &quot; + Risk.NONE);</span>
+<span class="fc" id="L48">            resultRisk = Risk.NONE;</span>
+        }
+
+        // The diabete risk is:  Borderline
+<span class="pc bpc" id="L52" title="1 of 8 branches missed.">        else if ((sex.equals(&quot;M&quot;) || sex.equals(&quot;F&quot;)) &amp;&amp; age &gt; 30 &amp;&amp; countTriggerInNote == 2) {</span>
+<span class="fc" id="L53">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L54">            logger.info(&quot;The diabete risk is: &quot; + Risk.BORDERLINE);</span>
+<span class="fc" id="L55">            resultRisk = Risk.BORDERLINE;</span>
+        }
+
+        // The diabete risk is:  Danger
+<span class="pc bpc" id="L59" title="1 of 8 branches missed.">        else if (sex.equals(&quot;M&quot;) &amp;&amp; age &lt;= 30 &amp;&amp; countTriggerInNote &gt;= 3 &amp;&amp; countTriggerInNote &lt; 5) {</span>
+<span class="fc" id="L60">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L61">            logger.info(&quot;The diabete risk is: &quot; + Risk.IN_DANGER);</span>
+<span class="fc" id="L62">            resultRisk = Risk.IN_DANGER;</span>
+<span class="pc bpc" id="L63" title="1 of 8 branches missed.">        } else if (sex.equals(&quot;F&quot;) &amp;&amp; age &lt;= 30 &amp;&amp; countTriggerInNote &gt;= 4 &amp;&amp; countTriggerInNote &lt; 7) {</span>
+<span class="fc" id="L64">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L65">            logger.info(&quot;The diabete risk is: &quot; + Risk.IN_DANGER);</span>
+<span class="fc" id="L66">            resultRisk = Risk.IN_DANGER;</span>
+<span class="pc bpc" id="L67" title="1 of 6 branches missed.">        } else if (age &gt; 30 &amp;&amp; countTriggerInNote &gt;= 6 &amp;&amp; countTriggerInNote &lt; 8) {</span>
+<span class="fc" id="L68">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L69">            logger.info(&quot;The diabete risk is: &quot; + Risk.IN_DANGER);</span>
+<span class="fc" id="L70">            resultRisk = Risk.IN_DANGER;</span>
+        }
+
+        // The diabete risk is:  Early onset
+<span class="pc bpc" id="L74" title="2 of 8 branches missed.">        else if (sex.equals(&quot;M&quot;) &amp;&amp; age &lt;= 30 &amp;&amp; countTriggerInNote &gt;= 5 &amp;&amp; countTriggerInNote &lt; 8) {</span>
+<span class="fc" id="L75">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L76">            logger.info(&quot;The diabete risk is: &quot; + Risk.EARLY_ONSET);</span>
+<span class="fc" id="L77">            resultRisk = Risk.EARLY_ONSET;</span>
+<span class="pc bpc" id="L78" title="2 of 6 branches missed.">        } else if (sex.equals(&quot;F&quot;) &amp;&amp; age &lt;= 30 &amp;&amp; countTriggerInNote &gt;= 7) {</span>
+<span class="fc" id="L79">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L80">            logger.info(&quot;The diabete risk is: &quot; + Risk.EARLY_ONSET);</span>
+<span class="fc" id="L81">            resultRisk = Risk.EARLY_ONSET;</span>
+<span class="pc bpc" id="L82" title="5 of 8 branches missed.">        } else if ((sex.equals(&quot;M&quot;) || sex.equals(&quot;F&quot;)) &amp;&amp; age &gt; 30 &amp;&amp; countTriggerInNote &gt;= 8) {</span>
+<span class="fc" id="L83">            logger.info(&quot;The genre is: &quot; + sex);</span>
+<span class="fc" id="L84">            logger.info(&quot;The diabete risk is: &quot; + Risk.EARLY_ONSET);</span>
+<span class="fc" id="L85">            return Risk.EARLY_ONSET;</span>
+        }
+
+<span class="fc" id="L88">        return resultRisk;</span>
+    }
+
+    public PatientBean findPatientById(int id) {
+<span class="fc" id="L92">        return patientProxy.getPatientById(id);</span>
+    }
+
+    @Override
+    public String findRapportById(Integer id) {
+<span class="fc" id="L97">        PatientBean patientBean = patientProxy.getPatientById(id);</span>
+<span class="fc" id="L98">        String risk = String.valueOf(getDiabeteLevelRisk(id));</span>
+<span class="fc" id="L99">        int age = ageCalculator.getAge(id);</span>
+<span class="fc" id="L100">        return &quot;Patient: &quot; + patientBean.getGiven() + &quot; &quot; + patientBean.getFamily() + &quot; (age &quot; + age + &quot;) diabetes assessment is: &quot; + risk;</span>
+    }
+
+    @Override
+    public String findRapportByFamilyName(String familyName) {
+<span class="fc" id="L105">        List&lt;PatientBean&gt; patientList = patientProxy.getAllPatient();</span>
+<span class="fc" id="L106">        PatientBean patient = new PatientBean();</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        for (PatientBean patientIt : patientList) {</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (patientIt.getFamily().equals(familyName)) {</span>
+<span class="fc" id="L109">                patient = patientIt;</span>
+            }
+<span class="fc" id="L111">        }</span>
+
+<span class="fc" id="L113">        String risk = String.valueOf(getDiabeteLevelRisk(patient.getId()));</span>
+<span class="fc" id="L114">        int age = ageCalculator.getAge(patient.getId());</span>
+<span class="fc" id="L115">        return &quot;Patient: &quot; + patient.getGiven() + &quot; &quot; + patient.getFamily() + &quot; (age &quot; + age + &quot;) diabetes assessment is: &quot; + risk;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

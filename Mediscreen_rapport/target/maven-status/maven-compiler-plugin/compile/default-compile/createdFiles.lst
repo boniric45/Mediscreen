@@ -1,0 +1,17 @@
+fr\mediscreen\rapport\RapportApplication.class
+fr\mediscreen\rapport\model\Risk.class
+fr\mediscreen\rapport\beans\PatientBean.class
+fr\mediscreen\rapport\interfaces\TriggerCalculator.class
+fr\mediscreen\rapport\controller\RapportController.class
+fr\mediscreen\rapport\model\Rapport.class
+fr\mediscreen\rapport\service\AgeCalculatorImpl.class
+fr\mediscreen\rapport\service\RapportServiceImpl.class
+fr\mediscreen\rapport\interfaces\RapportService.class
+fr\mediscreen\rapport\proxies\PatientProxy.class
+fr\mediscreen\rapport\config\SwaggerConfig.class
+fr\mediscreen\rapport\interfaces\AgeCalculator.class
+fr\mediscreen\rapport\service\TriggerCalculatorImpl.class
+fr\mediscreen\rapport\config\SwaggerConfig$1.class
+fr\mediscreen\rapport\proxies\NoteProxy.class
+fr\mediscreen\rapport\beans\NoteBean.class
+fr\mediscreen\rapport\constant\Trigger.class

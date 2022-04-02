@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AgeCalculatorImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">rapport</a> &gt; <a href="index.source.html" class="el_package">fr.mediscreen.rapport.service</a> &gt; <span class="el_source">AgeCalculatorImpl.java</span></div><h1>AgeCalculatorImpl.java</h1><pre class="source lang-java linenums">package fr.mediscreen.rapport.service;
+
+import fr.mediscreen.rapport.beans.PatientBean;
+import fr.mediscreen.rapport.interfaces.AgeCalculator;
+import fr.mediscreen.rapport.proxies.PatientProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.Period;
+
+@Service
+<span class="fc" id="L15">public class AgeCalculatorImpl implements AgeCalculator {</span>
+
+<span class="fc" id="L17">    private static final Logger logger = LoggerFactory.getLogger(AgeCalculatorImpl.class);</span>
+
+    @Autowired
+    PatientProxy patientProxy;
+
+    @Override
+    public int ageCalculate(LocalDate birthDate) {
+
+<span class="fc" id="L25">        int age = Period.between(birthDate, LocalDate.now()).getYears();</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (age &lt;= 0) {</span>
+<span class="fc" id="L27">            logger.error(&quot;The age of patient is not valid&quot;);</span>
+<span class="fc" id="L28">            throw new IllegalArgumentException(&quot;Person's birthdate isn't valid&quot;);</span>
+        }
+<span class="fc" id="L30">        logger.info(&quot;The age of patient is: &quot; + age);</span>
+<span class="fc" id="L31">        return age;</span>
+    }
+
+    @Override
+    public int getAge(Integer id) {
+
+<span class="fc" id="L37">        PatientBean patient = patientProxy.getPatientById(id);</span>
+<span class="fc" id="L38">        LocalDate birthDate = patient.getDob();</span>
+<span class="fc" id="L39">        int age = Period.between(birthDate, LocalDate.now()).getYears();</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (age &lt;= 0) {</span>
+<span class="nc" id="L41">            logger.error(&quot;The age of patient is not valid&quot;);</span>
+<span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Person's birthdate isn't valid&quot;);</span>
+        }
+<span class="fc" id="L44">        logger.info(&quot;The age of patient is: &quot; + age);</span>
+<span class="fc" id="L45">        return age;</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

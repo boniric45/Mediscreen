@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+patient,fr.mediscreen.demographique_patient,DemographiquePatientApplication,0,8,0,0,0,3,0,2,0,2
+patient,fr.mediscreen.demographique_patient.model,Patient,4,93,0,0,0,18,1,16,1,16
+patient,fr.mediscreen.demographique_patient.config,SwaggerConfig,0,19,0,0,0,7,0,3,0,3
+patient,fr.mediscreen.demographique_patient.config,SwaggerConfig.new WebMvcConfigurer() {...},0,39,0,0,0,4,0,2,0,2
+patient,fr.mediscreen.demographique_patient.service,PatientService,0,33,0,0,0,9,0,6,0,6
+patient,fr.mediscreen.demographique_patient.controller,PatientController,18,176,0,4,3,37,1,8,1,6

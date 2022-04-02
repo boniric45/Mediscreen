@@ -1,0 +1,7 @@
+fr\mediscreen\rapport\NoteTest.class
+fr\mediscreen\rapport\controller\RapportControllerTest.class
+fr\mediscreen\rapport\RiskApplicationTests.class
+fr\mediscreen\rapport\RiskIntegrationTest.class
+fr\mediscreen\rapport\PatientTest.class
+fr\mediscreen\rapport\services\AgeCalculatorImplTest.class
+fr\mediscreen\rapport\RapportTest.class

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RapportController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">rapport</a> &gt; <a href="index.source.html" class="el_package">fr.mediscreen.rapport.controller</a> &gt; <span class="el_source">RapportController.java</span></div><h1>RapportController.java</h1><pre class="source lang-java linenums">package fr.mediscreen.rapport.controller;
+
+import fr.mediscreen.rapport.beans.PatientBean;
+import fr.mediscreen.rapport.interfaces.AgeCalculator;
+import fr.mediscreen.rapport.interfaces.RapportService;
+import fr.mediscreen.rapport.interfaces.TriggerCalculator;
+import fr.mediscreen.rapport.model.Risk;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+<span class="fc" id="L17">public class RapportController {</span>
+
+<span class="fc" id="L19">    private static final Logger logger = LoggerFactory.getLogger(RapportController.class);</span>
+
+    @Autowired
+    RapportService rapportService;
+
+    @Autowired
+    AgeCalculator ageCalculator;
+
+    @Autowired
+    TriggerCalculator triggerCalculator;
+
+    @ApiOperation(value = &quot;Get diabetes level risk&quot;)
+    @GetMapping(&quot;/risk/{id}&quot;)
+    public @ResponseBody
+    ResponseEntity&lt;Risk&gt; getDiabetesLevelRisk(@PathVariable(&quot;id&quot;) Integer id) {
+<span class="fc" id="L34">        Risk risk = rapportService.getDiabeteLevelRisk(id);</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (risk != null) {</span>
+<span class="fc" id="L36">            logger.info(&quot;/risk/&quot; + id);</span>
+<span class="fc" id="L37">            return new ResponseEntity&lt;&gt;(risk, HttpStatus.OK);</span>
+        } else {
+<span class="nc" id="L39">            logger.info(&quot;/risk/&quot; + id + &quot; &quot; + HttpStatus.NOT_FOUND);</span>
+<span class="nc" id="L40">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+    }
+
+    @ApiOperation(value = &quot;Get rapport by patient id&quot;)
+    @RequestMapping(value = &quot;/assess/id&quot;, method = RequestMethod.POST)
+    public String getAssessById(@RequestParam int patId) {
+<span class="fc" id="L47">        String result = &quot;&quot;;</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (patId != 0) {</span>
+<span class="fc" id="L49">            result = rapportService.findRapportById(patId);</span>
+        } else {
+<span class="nc" id="L51">            result = &quot;The id is not found &quot;;</span>
+        }
+<span class="fc" id="L53">        return result;</span>
+    }
+
+    @ApiOperation(value = &quot;Get rapport by family name&quot;)
+    @RequestMapping(value = &quot;/assess/familyName&quot;, method = RequestMethod.POST)
+    public String getAssessByFamilyName(@RequestParam String familyName) {
+<span class="fc" id="L59">        String result = &quot;&quot;;</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (familyName != null) {</span>
+<span class="fc" id="L61">            result = rapportService.findRapportByFamilyName(familyName);</span>
+        } else {
+<span class="nc" id="L63">            result = &quot;Family name is not found &quot;;</span>
+        }
+<span class="fc" id="L65">        return result;</span>
+    }
+
+    @GetMapping(&quot;/patient/{id}&quot;)
+    public @ResponseBody
+    ResponseEntity&lt;PatientBean&gt; getPatient(@PathVariable(&quot;id&quot;) int id) {
+<span class="fc" id="L71">        PatientBean patientBean = rapportService.findPatientById(id);</span>
+<span class="fc" id="L72">        return new ResponseEntity&lt;&gt;(patientBean, HttpStatus.OK);</span>
+    }
+
+    @ApiOperation(value = &quot;Get age of patient&quot;)
+    @GetMapping(&quot;/rapport/age/{id}&quot;)
+    public @ResponseBody
+    ResponseEntity&lt;String&gt; getAge(@PathVariable(&quot;id&quot;) int id) {
+<span class="fc" id="L79">        PatientBean patientBean = rapportService.findPatientById(id);</span>
+<span class="fc" id="L80">        int age = ageCalculator.getAge(patientBean.getId());</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (age &gt; 0) {</span>
+<span class="fc" id="L82">            logger.info(&quot;/age/&quot; + patientBean.getId());</span>
+<span class="fc" id="L83">            return new ResponseEntity&lt;String&gt;(String.valueOf(age), HttpStatus.OK);</span>
+        } else {
+<span class="nc" id="L85">            logger.info(&quot;/age/&quot; + patientBean.getId() + &quot; &quot; + HttpStatus.NOT_FOUND);</span>
+<span class="nc" id="L86">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+    }
+
+    @ApiOperation(value = &quot;Get trigger of note to patient&quot;)
+    @GetMapping(&quot;/rapport/trigger/{id}&quot;)
+    public @ResponseBody
+    ResponseEntity&lt;Integer&gt; getTrigger(@PathVariable(&quot;id&quot;) Integer id) {
+<span class="fc" id="L94">        int trigger = triggerCalculator.calculateTriggerInNotes(id);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (trigger &gt; 0) {</span>
+<span class="fc" id="L96">            logger.info(&quot;/trigger/&quot; + id);</span>
+<span class="fc" id="L97">            return new ResponseEntity&lt;&gt;(trigger, HttpStatus.OK);</span>
+        } else {
+<span class="nc" id="L99">            logger.info(&quot;/trigger/&quot; + id + &quot; &quot; + HttpStatus.NOT_FOUND);</span>
+<span class="nc" id="L100">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+    }
+
+
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
