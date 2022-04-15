@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+    <title>Mediscreen</title>
+<style>
+
+h2{
+ font-family: "Sofia", sans-serif;
+  font-size: 30px;
+  text-shadow: 3px 3px 3px #ababab;
+}
+
+ .col-6 {
+ margin-top:20px;
+ margin-right:20px;
+font-size:18px;
+    }
+
+th{
+ font-family: "Sofia", sans-serif;
+  text-align: center;
+  font-size:16px;
+}
+
+.btn{
+margin-bottom: 5px;
+}
+
+</style>
+</head>
+<body>
+<div class="row">
+    <div class="col-6" align="right">
+        <a href="/notes">Notes</a>&nbsp;|&nbsp;
+        <a href="/assess">Rapports</a>&nbsp;|&nbsp;
+    </div>
+<div class="container">
+    <div class="row"><h2 align="center">Patients</h2></div>
+
+        <a class="btn btn-primary" href="/insertNewPatient" role="button" >Nouveau</a>
+        <table class="table table-bordered"  >
+            <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Genre</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Actions</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="patient : ${patientList}">
+                <td style="width: 10%" th:text="${patient.id}"></td>
+                <td th:text="${patient.family}"></td>
+                <td th:text="${patient.given}"></td>
+                <td th:text="${patient.dob}"></td>
+                <td th:text="${patient.sex}"></td>
+                <td th:text="${patient.address}"></td>
+                <td th:text="${patient.phone}"></td>
+                <td style="width: 15%" class="text-center">
+
+                    <a class="btn btn-info" th:href="@{updatePatient/{id}(id=${patient.id})}"role="button">Modifier</a>
+                    <a class="btn btn-danger" th:href="@{deletePatient/{id}(id=${patient.id})}"role="button">Supprimer</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
